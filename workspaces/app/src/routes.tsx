@@ -6,7 +6,13 @@ import { styled } from 'styled-components';
 import { Link } from './foundation/components/Link';
 import { Text } from './foundation/components/Text';
 import { ActionLayout } from './foundation/layouts/ActionLayout';
+import { CommonLayout } from './foundation/layouts/CommonLayout';
 import { Color, Space, Typography } from './foundation/styles/variables';
+import { AuthorDetailPage } from './pages/AuthorDetailPage';
+import { BookDetailPage } from './pages/BookDetailPage';
+import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
+import { SearchPage } from './pages/SearchPage';
+import { TopPage } from './pages/TopPage';
 
 const _BackToTopButton = styled(Link)`
   display: flex;
@@ -20,20 +26,8 @@ const _BackToTopButton = styled(Link)`
 export const Router: React.FC = () => {
   return (
     <Routes>
-      <Route
-        lazy={async () => {
-          const { CommonLayout } = await import('./foundation/layouts/CommonLayout');
-          return { Component: CommonLayout };
-        }}
-        path={'/'}
-      >
-        <Route
-          lazy={async () => {
-            const { TopPage } = await import('./pages/TopPage');
-            return { Component: TopPage };
-          }}
-          path={''}
-        />
+      <Route element={<CommonLayout />} path={'/'}>
+        <Route element={<TopPage />} path={''} />
       </Route>
       <Route
         element={
@@ -50,34 +44,10 @@ export const Router: React.FC = () => {
         }
         path={'/'}
       >
-        <Route
-          lazy={async () => {
-            const { BookDetailPage } = await import('./pages/BookDetailPage');
-            return { Component: BookDetailPage };
-          }}
-          path={'books/:bookId'}
-        />
-        <Route
-          lazy={async () => {
-            const { EpisodeDetailPage } = await import('./pages/EpisodeDetailPage');
-            return { Component: EpisodeDetailPage };
-          }}
-          path={'books/:bookId/episodes/:episodeId'}
-        />
-        <Route
-          lazy={async () => {
-            const { AuthorDetailPage } = await import('./pages/AuthorDetailPage');
-            return { Component: AuthorDetailPage };
-          }}
-          path={'authors/:authorId'}
-        />
-        <Route
-          lazy={async () => {
-            const { SearchPage } = await import('./pages/SearchPage');
-            return { Component: SearchPage };
-          }}
-          path={'search'}
-        />
+        <Route element={<BookDetailPage />} path={'books/:bookId'} />
+        <Route element={<EpisodeDetailPage />} path={'books/:bookId/episodes/:episodeId'} />
+        <Route element={<AuthorDetailPage />} path={'authors/:authorId'} />
+        <Route element={<SearchPage />} path={'search'} />
       </Route>
     </Routes>
   );
