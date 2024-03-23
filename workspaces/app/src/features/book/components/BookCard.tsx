@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
+import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
 
 import { Flex } from '../../../foundation/components/Flex';
 import { Image } from '../../../foundation/components/Image';
@@ -33,7 +33,7 @@ const _AvatarWrapper = styled.div`
 `;
 
 type Props = {
-  book: Omit<GetBookResponse, 'nameRuby'>;
+  book: Omit<GetBookListResponse[number], 'nameRuby'>;
 };
 
 export const BookCard: React.FC<Props> = ({ book }) => {

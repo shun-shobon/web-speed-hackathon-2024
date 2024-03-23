@@ -1,7 +1,7 @@
 import { NavigateNext } from '@mui/icons-material';
 import styled from 'styled-components';
 
-import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
+import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
 
 import { Box } from '../../../foundation/components/Box';
 import { Flex } from '../../../foundation/components/Flex';
@@ -37,7 +37,7 @@ const _AvatarWrapper = styled.div`
 `;
 
 type Props = {
-  book: Omit<GetBookResponse, 'nameRuby'>;
+  book: Omit<GetBookListResponse[number], 'nameRuby'>;
 };
 
 export const RankingCard: React.FC<Props> = ({ book }) => {
