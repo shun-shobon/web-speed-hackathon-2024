@@ -4,6 +4,7 @@ import path from 'node:path';
 import { pnpmWorkspaceRoot as findWorkspaceDir } from '@node-kit/pnpm-workspace-root';
 import react from '@vitejs/plugin-react';
 import findPackageDir from 'pkg-dir';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
@@ -27,6 +28,7 @@ export default defineConfig(async () => {
         output: {
           entryFileNames: '[name].js',
         },
+        plugins: [visualizer()],
       },
       sourcemap: true,
       target: ['chrome123'],
