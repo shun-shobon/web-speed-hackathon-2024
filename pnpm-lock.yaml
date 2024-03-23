@@ -74,9 +74,6 @@ importers:
       regexparam:
         specifier: 3.0.0
         version: 3.0.0
-      underscore:
-        specifier: 1.13.6
-        version: 1.13.6
       yup:
         specifier: 1.4.0
         version: 1.4.0
@@ -90,9 +87,6 @@ importers:
       '@types/react-dom':
         specifier: 18.2.1
         version: 18.2.1
-      '@types/underscore':
-        specifier: 1.11.15
-        version: 1.11.15
 
   workspaces/app:
     dependencies:
@@ -120,9 +114,6 @@ importers:
       jotai:
         specifier: 2.7.0
         version: 2.7.0(@types/react@18.2.0)(react@18.2.0)
-      lodash:
-        specifier: 4.17.21
-        version: 4.17.21
       moment-timezone:
         specifier: 0.5.45
         version: 0.5.45
@@ -157,9 +148,6 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
-      '@types/lodash':
-        specifier: 4.14.202
-        version: 4.14.202
       '@types/react':
         specifier: 18.2.0
         version: 18.2.0
@@ -4123,6 +4111,7 @@ packages:
 
   /@types/lodash@4.14.202:
     resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
+    dev: false
 
   /@types/node@16.9.1:
     resolution: {integrity: sha512-QpLcX9ZSsq3YYUUnD3nFDY8H7wctAhQj/TFKL8Ya8v5fMm3CFXxo8zStsLAl780ltoYoo1WvKUVGBQK+1ifr7g==}
@@ -4193,10 +4182,6 @@ packages:
   /@types/stylis@4.2.5:
     resolution: {integrity: sha512-1Xve+NMN7FWjY14vLoY5tL3BVEQ/n42YLwaqJIPYhotZ9uBHt87VceMwWQpzmdEt2TNXIorIFG+YeCUUW7RInw==}
     dev: false
-
-  /@types/underscore@1.11.15:
-    resolution: {integrity: sha512-HP38xE+GuWGlbSRq9WrZkousaQ7dragtZCruBVMi0oX1migFZavZ3OROKHSkNp/9ouq82zrWtZpg18jFnVN96g==}
-    dev: true
 
   /@types/uuid@9.0.7:
     resolution: {integrity: sha512-WUtIVRUZ9i5dYXefDEAI7sh9/O7jGvHg7Df/5O/gtH3Yabe5odI3UWopVR1qbPXQtvOxWu3mM4XxlYeZtMWF4g==}
@@ -10102,10 +10087,6 @@ packages:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
     dev: true
-
-  /underscore@1.13.6:
-    resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
-    dev: false
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
