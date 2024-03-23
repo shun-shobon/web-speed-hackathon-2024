@@ -69,3 +69,8 @@ export const EpisodeListItem: React.FC<Props> = ({ bookId, episode }) => {
     </_Wrapper>
   );
 };
+
+export const EpisodeListItemSkeleton = styled.li`
+  width: 100%;
+  height: 121px;
+`;
