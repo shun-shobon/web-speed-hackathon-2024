@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const SearchResult: React.FC<Props> = memo(({ keyword }: Props) => {
-  const { data: books } = useBookSearch({ query: { keyword } });
+  const { data: books } = useBookSearch({ query: { name: keyword } });
 
   if (books.length === 0) {
     return (

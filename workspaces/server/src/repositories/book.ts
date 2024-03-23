@@ -203,22 +203,35 @@ class BookRepository implements BookRepositoryInterface {
         },
       });
 
-      if (options.query.keyword == null || options.query.keyword === '') {
-        return ok([]);
+      let filteredBooks: GetBookListResponse;
+      if (options.query.bookId != null && options.query.bookId !== '') {
+        filteredBooks = data.filter((book) => {
+          return book.id === options.query.bookId;
+        });
+      } else if (options.query.authorId != null && options.query.authorId !== '') {
+        filteredBooks = data.filter((book) => {
+          return book.author.id === options.query.authorId;
+        });
+      } else if (options.query.name != null && options.query.name !== '') {
+        const normalizedName = normalizeString(options.query.name);
+
+        filteredBooks = data.filter((book) => {
+          return (
+            normalizeString(book.name).includes(normalizedName) ||
+            normalizeString(book.nameRuby).includes(normalizedName)
+          );
+        });
+      } else if (options.query.authorName != null && options.query.authorName !== '') {
+        const normalizedAuthorName = normalizeString(options.query.authorName);
+
+        filteredBooks = data.filter((book) => {
+          return normalizeString(book.author.name).includes(normalizedAuthorName);
+        });
+      } else {
+        filteredBooks = [];
       }
 
-      const normalizedKeyword = normalizeString(options.query.keyword);
-
-      const relatedBooks = data
-        .filter((book) => {
-          return (
-            normalizeString(book.name).includes(normalizedKeyword) ||
-            normalizeString(book.nameRuby).includes(normalizedKeyword)
-          );
-        })
-        .slice(0, 30);
-
-      return ok(relatedBooks);
+      return ok(filteredBooks.slice(0, 30));
     } catch (cause) {
       if (cause instanceof HTTPException) {
         return err(cause);
