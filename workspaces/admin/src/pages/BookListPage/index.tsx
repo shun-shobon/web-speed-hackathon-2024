@@ -18,8 +18,10 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useId, useMemo, useState } from 'react';
+import { memo, useCallback, useDeferredValue, useId, useMemo, useState } from 'react';
 import { create } from 'zustand';
+
+import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
 
 import { useBookList } from '../../features/books/hooks/useBookList';
 import { isContains } from '../../lib/filter/isContains';
@@ -76,7 +78,7 @@ export const BookListPage: React.FC = () => {
 
   const filteredBookList = useMemo(() => {
     if (formik.values.query === '') {
-      return bookList;
+      return [];
     }
 
     switch (formik.values.kind) {
@@ -105,6 +107,7 @@ export const BookListPage: React.FC = () => {
       }
     }
   }, [formik.values.kind, formik.values.query, bookList]);
+  const deferredFilteredBookList = useDeferredValue(filteredBookList);
 
   const [useModalStore] = useState(() => {
     return create<BookModalState & BookModalAction>()((set) => ({
@@ -126,6 +129,13 @@ export const BookListPage: React.FC = () => {
     }));
   });
   const modalState = useModalStore();
+
+  const handleDetailClick = useCallback(
+    (bookId: string) => {
+      modalState.openDetail(bookId);
+    },
+    [modalState],
+  );
 
   return (
     <>
@@ -214,29 +224,7 @@ export const BookListPage: React.FC = () => {
                   <Th>作者名</Th>
                 </Tr>
               </Thead>
-              <Tbody>
-                {filteredBookList.map((book) => (
-                  <Tr key={book.id}>
-                    <Td textAlign="center" verticalAlign="middle">
-                      <Button colorScheme="teal" onClick={() => modalState.openDetail(book.id)} variant="solid">
-                        詳細
-                      </Button>
-                    </Td>
-                    <Td verticalAlign="middle">
-                      <Text fontWeight="bold">{book.name}</Text>
-                      <Text color="gray.400" fontSize="small">
-                        {book.id}
-                      </Text>
-                    </Td>
-                    <Td verticalAlign="middle">
-                      <Text fontWeight="bold">{book.author.name}</Text>
-                      <Text color="gray.400" fontSize="small">
-                        {book.author.id}
-                      </Text>
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
+              <MemorizedBookTBody bookList={deferredFilteredBookList} onDetailClick={handleDetailClick} />
             </Table>
           </TableContainer>
         </StackItem>
@@ -249,3 +237,36 @@ export const BookListPage: React.FC = () => {
     </>
   );
 };
+
+interface BookListPageProps {
+  bookList: GetBookListResponse;
+  onDetailClick: (bookId: string) => void;
+}
+const MemorizedBookTBody = memo(({ bookList, onDetailClick }: BookListPageProps) => {
+  return (
+    <Tbody>
+      {bookList.map((book) => (
+        <Tr key={book.id}>
+          <Td textAlign="center" verticalAlign="middle">
+            <Button colorScheme="teal" onClick={() => onDetailClick(book.id)} variant="solid">
+              詳細
+            </Button>
+          </Td>
+          <Td verticalAlign="middle">
+            <Text fontWeight="bold">{book.name}</Text>
+            <Text color="gray.400" fontSize="small">
+              {book.id}
+            </Text>
+          </Td>
+          <Td verticalAlign="middle">
+            <Text fontWeight="bold">{book.author.name}</Text>
+            <Text color="gray.400" fontSize="small">
+              {book.author.id}
+            </Text>
+          </Td>
+        </Tr>
+      ))}
+    </Tbody>
+  );
+});
+MemorizedBookTBody.displayName = 'BookTBody';
