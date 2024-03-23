@@ -275,6 +275,9 @@ importers:
       '@hono/zod-validator':
         specifier: 0.2.0
         version: 0.2.0(hono@4.1.0)(zod@3.22.4)
+      '@jsquash/jxl':
+        specifier: 1.1.0
+        version: 1.1.0
       '@node-kit/pnpm-workspace-root':
         specifier: 3.2.0
         version: 3.2.0
@@ -3413,7 +3416,6 @@ packages:
     resolution: {integrity: sha512-atdg3ZOOhmK3A87gRRS1mTBp+ljVK0rYaAVAhnrv7GhKTPFDZKo+GkLsXMu5oAka43Wi9iBOXFJeq+xtD1z57w==}
     dependencies:
       wasm-feature-detect: 1.6.1
-    dev: true
 
   /@mui/base@5.0.0-beta.31(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-+uNbP3OHJuZVI00WyMg7xfLZotaEY7LgvYXDfONVJbrS+K9wyjCIPNfjy8r9XJn4fbHo/5ibiZqjWnU9LMNv+A==}
@@ -9993,7 +9995,6 @@ packages:
 
   /wasm-feature-detect@1.6.1:
     resolution: {integrity: sha512-R1i9ED8UlLu/foILNB1ck9XS63vdtqU/tP1MCugVekETp/ySCrBZRk5I/zI67cI1wlQYeSonNm1PLjDHZDNg6g==}
-    dev: true
 
   /web-worker-manager@0.2.0:
     resolution: {integrity: sha512-WmGabA4GLth1ju9VLm/oMDcPMhMngHoBSdY1OMhrEJvNsPl7z2p+7RBOXjEi5zlP0dK+Shd3Wm+BdD5WZrNYBA==}
