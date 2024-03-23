@@ -4,7 +4,6 @@
   "dependencies": {
     "@mui/icons-material": "5.15.4",
     "@mui/material": "5.15.4",
-    "@react-spring/web": "9.7.3",
     "@wsh-2024/image-encrypt": "workspace:*",
     "@wsh-2024/schema": "workspace:*",
     "axios": "1.6.5",
