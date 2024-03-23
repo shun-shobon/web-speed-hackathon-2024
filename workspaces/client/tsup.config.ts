@@ -51,7 +51,7 @@ export default defineConfig(async (): Promise<Options[]> => {
       format: 'esm',
       loader: {
         '.json?file': 'file',
-        '.wasm': 'binary',
+        '.wasm': 'file',
       },
       metafile: true,
       minify: true,
