@@ -1,4 +1,5 @@
-import { Suspense, useCallback, useDeferredValue, useEffect, useId, useState } from 'react';
+import { Suspense, useCallback, useEffect, useId, useState } from 'react';
+import { useDebounce } from 'react-use';
 
 import { Box } from '../../foundation/components/Box';
 import { Flex } from '../../foundation/components/Flex';
@@ -13,7 +14,15 @@ const SearchPage: React.FC = () => {
 
   const [isClient, setIsClient] = useState(false);
   const [keyword, setKeyword] = useState('');
-  const deferredKeyword = useDeferredValue(keyword);
+  const [deferredKeyword, setDeferredKeyword] = useState('');
+
+  useDebounce(
+    () => {
+      setDeferredKeyword(keyword);
+    },
+    500,
+    [keyword],
+  );
 
   const onChangedInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

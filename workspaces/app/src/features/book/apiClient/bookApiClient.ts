@@ -36,13 +36,13 @@ export const bookApiClient: BookApiClient = {
     ...options,
   }),
   search: async ({ query }) => {
-    const response = await apiClient.get<SearchBookResponse>(inject('/api/v1/books/search', {}), {
+    const response = await apiClient.get<SearchBookResponse>(inject('/api/v1/search', {}), {
       params: query,
     });
     return response.data;
   },
   search$$key: (options) => ({
-    requestUrl: `/api/v1/books/search`,
+    requestUrl: `/api/v1/search`,
     ...options,
   }),
 };

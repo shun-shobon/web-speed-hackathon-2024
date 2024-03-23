@@ -170,7 +170,6 @@ class BookRepository implements BookRepositoryInterface {
           name: true,
           nameRuby: true,
         },
-        limit: 20,
         orderBy(book, { asc }) {
           return asc(book.createdAt);
         },
@@ -210,12 +209,14 @@ class BookRepository implements BookRepositoryInterface {
 
       const normalizedKeyword = normalizeString(options.query.keyword);
 
-      const relatedBooks = data.filter((book) => {
-        return (
-          normalizeString(book.name).includes(normalizedKeyword) ||
-          normalizeString(book.nameRuby).includes(normalizedKeyword)
-        );
-      });
+      const relatedBooks = data
+        .filter((book) => {
+          return (
+            normalizeString(book.name).includes(normalizedKeyword) ||
+            normalizeString(book.nameRuby).includes(normalizedKeyword)
+          );
+        })
+        .slice(0, 30);
 
       return ok(relatedBooks);
     } catch (cause) {
