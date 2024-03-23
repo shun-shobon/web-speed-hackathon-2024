@@ -1,6 +1,5 @@
 // import './side-effects';
 
-import $ from 'jquery';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { SWRConfig } from 'swr';
@@ -15,20 +14,19 @@ const main = async () => {
   await registerServiceWorker();
   await preloadImages();
 
-  $(document).ready(() => {
-    if (window.location.pathname.startsWith('/admin')) {
-      ReactDOM.createRoot($('#root').get(0)!).render(<AdminApp />);
-    } else {
-      ReactDOM.hydrateRoot(
-        $('#root').get(0)!,
-        <SWRConfig value={{ revalidateIfStale: true, revalidateOnFocus: false, revalidateOnReconnect: false }}>
-          <BrowserRouter>
-            <ClientApp />
-          </BrowserRouter>
-        </SWRConfig>,
-      );
-    }
-  });
+  const container = document.querySelector('#root');
+  if (window.location.pathname.startsWith('/admin')) {
+    ReactDOM.createRoot(container!).render(<AdminApp />);
+  } else {
+    ReactDOM.hydrateRoot(
+      container!,
+      <SWRConfig value={{ revalidateIfStale: true, revalidateOnFocus: false, revalidateOnReconnect: false }}>
+        <BrowserRouter>
+          <ClientApp />
+        </BrowserRouter>
+      </SWRConfig>,
+    );
+  }
 };
 
 main().catch(console.error);
