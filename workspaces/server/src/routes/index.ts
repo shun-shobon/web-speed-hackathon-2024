@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
+import { etag } from 'hono/etag';
 import { HTTPException } from 'hono/http-exception';
 import { logger } from 'hono/logger';
 import { secureHeaders } from 'hono/secure-headers';
@@ -15,6 +16,7 @@ const app = new Hono();
 
 app.use(logger());
 app.use(compress());
+app.use(etag());
 app.use(secureHeaders());
 app.use(
   cors({

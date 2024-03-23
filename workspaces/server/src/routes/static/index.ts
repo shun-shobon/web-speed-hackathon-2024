@@ -2,7 +2,6 @@ import path from 'node:path';
 
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
-import { etag } from 'hono/etag';
 import { createMiddleware } from 'hono/factory';
 
 import { CLIENT_STATIC_PATH } from '../../constants/paths';
@@ -16,7 +15,6 @@ const cacheControlMiddleware = createMiddleware(async (c, next) => {
 });
 
 app.use(cacheControlMiddleware);
-app.use(etag());
 
 app.use(
   '*',
