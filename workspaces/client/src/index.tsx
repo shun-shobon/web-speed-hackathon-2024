@@ -13,7 +13,7 @@ import { registerServiceWorker } from './utils/registerServiceWorker';
 
 const main = async () => {
   await registerServiceWorker();
-  // await preloadImages();
+  await preloadImages();
 
   $(document).ready(() => {
     if (window.location.pathname.startsWith('/admin')) {
