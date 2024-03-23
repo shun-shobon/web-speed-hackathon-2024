@@ -6,7 +6,6 @@ import react from '@vitejs/plugin-react';
 import findPackageDir from 'pkg-dir';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig(async () => {
   const PACKAGE_DIR = (await findPackageDir(process.cwd()))!;
@@ -38,14 +37,6 @@ export default defineConfig(async () => {
       'process.env.NODE_ENV': JSON.stringify(process.env['NODE_ENV'] || 'development'),
       'process.env.PATH_LIST': JSON.stringify(IMAGE_PATH_LIST.join(',') || ''),
     },
-    plugins: [
-      react(),
-      nodePolyfills({
-        globals: {
-          process: false,
-        },
-        include: ['events', 'fs', 'path', 'buffer'],
-      }),
-    ],
+    plugins: [react()],
   };
 });
