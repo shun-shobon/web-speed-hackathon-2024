@@ -281,9 +281,6 @@ importers:
       '@node-kit/pnpm-workspace-root':
         specifier: 3.2.0
         version: 3.2.0
-      '@oneidentity/zstd-js':
-        specifier: 1.0.3
-        version: 1.0.3
       '@wsh-2024/app':
         specifier: workspace:*
         version: link:../app
@@ -3619,12 +3616,6 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.16.0
 
-  /@oneidentity/zstd-js@1.0.3:
-    resolution: {integrity: sha512-Jm6sawqxLzBrjC4sg2BeXToa33yPzUmq20CKsehKY2++D/gHb/oSwVjNgT+RH4vys+r8FynrgcNzGwhZWMLzfQ==}
-    dependencies:
-      '@types/emscripten': 1.39.10
-    dev: false
-
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -4010,10 +4001,6 @@ packages:
     dependencies:
       '@types/node': 20.9.0
     dev: true
-
-  /@types/emscripten@1.39.10:
-    resolution: {integrity: sha512-TB/6hBkYQJxsZHSqyeuO1Jt0AB/bW6G7rHt9g7lML7SOF6lbgcHvw/Lr+69iqN0qxgXLhWKScAon73JNnptuDw==}
-    dev: false
 
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
