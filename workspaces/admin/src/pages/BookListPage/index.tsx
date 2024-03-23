@@ -18,13 +18,10 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { memo, useCallback, useDeferredValue, useId, useMemo, useState } from 'react';
+import { memo, useCallback, useId, useState } from 'react';
 import { create } from 'zustand';
 
-import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
-
-import { useBookList } from '../../features/books/hooks/useBookList';
-import { isContains } from '../../lib/filter/isContains';
+import { useBookSearch } from '../../features/books/hooks/useBookSearch';
 
 import { BookDetailModal } from './internal/BookDetailModal';
 import { CreateBookModal } from './internal/CreateBookModal';
@@ -65,7 +62,6 @@ type BookModalAction = {
 };
 
 export const BookListPage: React.FC = () => {
-  const { data: bookList = [] } = useBookList();
   const bookListA11yId = useId();
 
   const formik = useFormik({
@@ -75,39 +71,6 @@ export const BookListPage: React.FC = () => {
     },
     onSubmit() {},
   });
-
-  const filteredBookList = useMemo(() => {
-    if (formik.values.query === '') {
-      return [];
-    }
-
-    switch (formik.values.kind) {
-      case BookSearchKind.BookId: {
-        return bookList.filter((book) => book.id === formik.values.query);
-      }
-      case BookSearchKind.BookName: {
-        return bookList.filter((book) => {
-          return (
-            isContains({ query: formik.values.query, target: book.name }) ||
-            isContains({ query: formik.values.query, target: book.nameRuby })
-          );
-        });
-      }
-      case BookSearchKind.AuthorId: {
-        return bookList.filter((book) => book.author.id === formik.values.query);
-      }
-      case BookSearchKind.AuthorName: {
-        return bookList.filter((book) => {
-          return isContains({ query: formik.values.query, target: book.author.name });
-        });
-      }
-      default: {
-        formik.values.kind satisfies never;
-        return bookList;
-      }
-    }
-  }, [formik.values.kind, formik.values.query, bookList]);
-  const deferredFilteredBookList = useDeferredValue(filteredBookList);
 
   const [useModalStore] = useState(() => {
     return create<BookModalState & BookModalAction>()((set) => ({
@@ -224,7 +187,11 @@ export const BookListPage: React.FC = () => {
                   <Th>作者名</Th>
                 </Tr>
               </Thead>
-              <MemorizedBookTBody bookList={deferredFilteredBookList} onDetailClick={handleDetailClick} />
+              <MemorizedBookTBody
+                kind={formik.values.kind}
+                onDetailClick={handleDetailClick}
+                query={formik.values.query}
+              />
             </Table>
           </TableContainer>
         </StackItem>
@@ -239,10 +206,21 @@ export const BookListPage: React.FC = () => {
 };
 
 interface BookListPageProps {
-  bookList: GetBookListResponse;
+  kind: BookSearchKind;
   onDetailClick: (bookId: string) => void;
+  query: string;
 }
-const MemorizedBookTBody = memo(({ bookList, onDetailClick }: BookListPageProps) => {
+const MemorizedBookTBody = memo(({ kind, onDetailClick, query }: BookListPageProps) => {
+  const { data: bookList = [] } = useBookSearch(
+    kind === BookSearchKind.BookId
+      ? { bookId: query }
+      : kind === BookSearchKind.BookName
+        ? { name: query }
+        : kind === BookSearchKind.AuthorId
+          ? { authorId: query }
+          : { authorName: query },
+  );
+
   return (
     <Tbody>
       {bookList.map((book) => (

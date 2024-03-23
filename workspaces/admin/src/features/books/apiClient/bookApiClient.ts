@@ -11,6 +11,8 @@ import type { PatchBookRequestParams } from '@wsh-2024/schema/src/api/books/Patc
 import type { PatchBookResponse } from '@wsh-2024/schema/src/api/books/PatchBookResponse';
 import type { PostBookRequestBody } from '@wsh-2024/schema/src/api/books/PostBookRequestBody';
 import type { PostBookResponse } from '@wsh-2024/schema/src/api/books/PostBookResponse';
+import type { SearchBookRequestQuery } from '@wsh-2024/schema/src/api/books/SearchBookRequestQuery';
+import type { SearchBookResponse } from '@wsh-2024/schema/src/api/books/SearchBookSearchResponse';
 
 import type { DomainSpecificApiClientInterface } from '../../../lib/api/DomainSpecificApiClientInterface';
 import { apiClient } from '../../../lib/api/apiClient';
@@ -20,6 +22,7 @@ type BookApiClient = DomainSpecificApiClientInterface<{
   fetch: [{ params: GetBookRequestParams }, GetBookResponse];
   fetchList: [{ query: GetBookListRequestQuery }, GetBookListResponse];
   post: [{ body: PostBookRequestBody }, PostBookResponse];
+  search: [{ query: SearchBookRequestQuery }, SearchBookResponse];
   update: [{ body: PatchBookRequestBody; params: PatchBookRequestParams }, PatchBookResponse];
 }>;
 
@@ -67,6 +70,19 @@ export const bookApiClient: BookApiClient = {
     {
       method: 'post',
       requestUrl: '/api/v1/books',
+    },
+    options,
+  ],
+  search: async ({ query }) => {
+    const response = await apiClient
+      .get(inject('api/v1/search', {}), { searchParams: JSON.parse(JSON.stringify(query)) })
+      .json<SearchBookResponse>();
+    return response;
+  },
+  search$$key: (options) => [
+    {
+      method: 'get',
+      requestUrl: '/api/v1/search',
     },
     options,
   ],
