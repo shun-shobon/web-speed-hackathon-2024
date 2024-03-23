@@ -2,9 +2,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { SWRConfig } from 'swr';
 
-import { AdminApp } from '@wsh-2024/admin/src/index';
-import { ClientApp } from '@wsh-2024/app/src/index';
-
 import { registerServiceWorker } from './utils/registerServiceWorker';
 
 const main = async () => {
@@ -12,8 +9,10 @@ const main = async () => {
 
   const container = document.querySelector('#root');
   if (window.location.pathname.startsWith('/admin')) {
+    const { AdminApp } = await import('@wsh-2024/admin/src/index');
     ReactDOM.createRoot(container!).render(<AdminApp />);
   } else {
+    const { ClientApp } = await import('@wsh-2024/app/src/index');
     ReactDOM.hydrateRoot(
       container!,
       <SWRConfig value={{ revalidateIfStale: true, revalidateOnFocus: false, revalidateOnReconnect: false }}>
