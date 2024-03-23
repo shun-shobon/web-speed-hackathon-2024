@@ -1,6 +1,6 @@
-import { Search } from '@mui/icons-material';
 import styled from 'styled-components';
 
+import { SvgIcon } from '../../../features/icons/components/SvgIcon';
 import { Link } from '../../../foundation/components/Link';
 import { Text } from '../../../foundation/components/Text';
 import { Color, Radius, Space, Typography } from '../../../foundation/styles/variables';
@@ -34,7 +34,7 @@ export const CoverSection: React.FC = () => {
     <_Wrapper>
       <HeroImage />
       <_SearchLink href="/search">
-        <Search style={{ color: Color.MONO_A, height: 24, width: 24 }} />
+        <SvgIcon color={Color.MONO_A} height={24} type="Search" width={24} />
         <Text color={Color.MONO_A} typography={Typography.NORMAL16}>
           検索
         </Text>

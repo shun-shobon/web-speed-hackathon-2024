@@ -1,19 +1,11 @@
+import { animated, useSpring } from '@react-spring/web';
 import { useCallback } from 'react';
-import { keyframes, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import { Link } from '../../../foundation/components/Link';
 import { Color, Radius, Space } from '../../../foundation/styles/variables';
 
 import { FavButton } from './FavButton';
-
-const slideIn = keyframes`
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-`;
 
 const _Wrapper = styled.div`
   position: fixed;
@@ -31,8 +23,6 @@ const _Content = styled.div`
   padding: ${Space * 1}px;
   border-radius: calc(${Radius.X_LARGE} + ${Space * 1}px);
   background-color: ${Color.MONO_A};
-
-  animation: ${slideIn} 0.3s ease-out;
 `;
 
 const _ReadLink = styled(Link)`
@@ -53,16 +43,23 @@ type Props = {
 };
 
 export const BottomNavigator: React.FC<Props> = ({ bookId, isFavorite, latestEpisodeId, onClickFav }) => {
+  const props = useSpring({
+    from: { transform: 'translateY(100%)' },
+    to: { transform: 'translateY(0)' },
+  });
+
   const handleFavClick = useCallback(() => {
     onClickFav();
   }, [onClickFav]);
 
   return (
     <_Wrapper>
-      <_Content>
-        <FavButton enabled={isFavorite} onClick={handleFavClick} />
-        <_ReadLink to={`/books/${bookId}/episodes/${latestEpisodeId}`}>最新話を読む</_ReadLink>
-      </_Content>
+      <animated.div style={props}>
+        <_Content>
+          <FavButton enabled={isFavorite} onClick={handleFavClick} />
+          <_ReadLink to={`/books/${bookId}/episodes/${latestEpisodeId}`}>最新話を読む</_ReadLink>
+        </_Content>
+      </animated.div>
     </_Wrapper>
   );
 };

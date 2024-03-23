@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useId, useMemo, useState } from 'react';
+import _ from 'underscore';
 import { create } from 'zustand';
 
 import { useBookList } from '../../features/books/hooks/useBookList';
@@ -215,7 +216,7 @@ export const BookListPage: React.FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {filteredBookList.map((book) => (
+                {_.map(filteredBookList, (book) => (
                   <Tr key={book.id}>
                     <Td textAlign="center" verticalAlign="middle">
                       <Button colorScheme="teal" onClick={() => modalState.openDetail(book.id)} variant="solid">

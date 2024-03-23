@@ -6,7 +6,7 @@
     "build:clean": "rm -rf ./dist",
     "build:copy": "cp -r ./seeds/images ./dist/images",
     "build:tsup": "tsup",
-    "start": "node --enable-source-maps ./dist/server.js"
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "@hapi/accept": "6.0.3",
@@ -22,10 +22,14 @@
     "bcryptjs": "2.4.3",
     "better-sqlite3": "9.3.0",
     "drizzle-orm": "0.29.3",
+    "file-type": "19.0.0",
     "globby": "14.0.1",
     "hono": "4.1.0",
     "image-js": "0.35.5",
+    "jsdom": "24.0.0",
     "jsesc": "3.0.2",
+    "log4js": "6.9.1",
+    "moment-timezone": "0.5.45",
     "neverthrow": "6.1.0",
     "pkg-dir": "5.0.0",
     "react": "18.2.0",

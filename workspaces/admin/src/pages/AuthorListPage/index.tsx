@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useId, useMemo, useState } from 'react';
+import _ from 'underscore';
 import { create } from 'zustand';
 
 import { useAuthorList } from '../../features/authors/hooks/useAuthorList';
@@ -183,7 +184,7 @@ export const AuthorListPage: React.FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {filteredAuthorList.map((author) => (
+                {_.map(filteredAuthorList, (author) => (
                   <Tr key={author.id}>
                     <Td textAlign="center" verticalAlign="middle">
                       <Button colorScheme="teal" onClick={() => modalState.openDetail(author.id)} variant="solid">

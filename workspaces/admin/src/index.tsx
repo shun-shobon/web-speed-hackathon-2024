@@ -1,3 +1,5 @@
+import './setup';
+
 import { ChakraProvider, useToast } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
