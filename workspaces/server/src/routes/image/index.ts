@@ -13,6 +13,7 @@ import { IMAGES_PATH } from '../../constants/paths';
 import type { ConverterInterface } from '../../image-converters/ConverterInterface';
 import { avifConverter } from '../../image-converters/avifConverter';
 import { jpegConverter } from '../../image-converters/jpegConverter';
+import { jpegXlConverter } from '../../image-converters/jpegXlConverter';
 import { pngConverter } from '../../image-converters/pngConverter';
 import { webpConverter } from '../../image-converters/webpConverter';
 
@@ -34,7 +35,7 @@ const createStreamBody = (stream: ReadStream) => {
   return body;
 };
 
-const SUPPORTED_IMAGE_EXTENSIONS = ['avif', 'webp', 'png', 'jpeg', 'jpg'] as const;
+const SUPPORTED_IMAGE_EXTENSIONS = ['jxl', 'avif', 'webp', 'png', 'jpeg', 'jpg'] as const;
 
 type SupportedImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number];
 
@@ -46,6 +47,7 @@ const IMAGE_MIME_TYPE: Record<SupportedImageExtension, string> = {
   ['avif']: 'image/avif',
   ['jpeg']: 'image/jpeg',
   ['jpg']: 'image/jpeg',
+  ['jxl']: 'image/jxl',
   ['png']: 'image/png',
   ['webp']: 'image/webp',
 };
@@ -54,6 +56,7 @@ const IMAGE_CONVERTER: Record<SupportedImageExtension, ConverterInterface> = {
   ['avif']: avifConverter,
   ['jpeg']: jpegConverter,
   ['jpg']: jpegConverter,
+  ['jxl']: jpegXlConverter,
   ['png']: pngConverter,
   ['webp']: webpConverter,
 };
