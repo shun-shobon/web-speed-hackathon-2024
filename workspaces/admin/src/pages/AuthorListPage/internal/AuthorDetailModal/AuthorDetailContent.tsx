@@ -33,7 +33,7 @@ export const AuthorDetailContent: React.FC<AuthorDetailContentProps> = ({ author
   return (
     <Box aria-label="作者詳細" as="section">
       <Flex align="center" pb={2}>
-        <Avatar name={author.name} size="xl" src={getImageUrl({ format: 'jpg', imageId: author.image.id })} />
+        <Avatar name={author.name} size="xl" src={getImageUrl({ format: 'webp', imageId: author.image.id })} />
         <Stack p={4} spacing={2}>
           <StackItem>
             <Text fontWeight="bold">{author.name}</Text>
