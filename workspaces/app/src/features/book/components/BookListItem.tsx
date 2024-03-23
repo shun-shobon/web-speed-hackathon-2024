@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
+
 import { Box } from '../../../foundation/components/Box';
 import { Flex } from '../../../foundation/components/Flex';
 import { Image } from '../../../foundation/components/Image';
@@ -9,7 +11,6 @@ import { Spacer } from '../../../foundation/components/Spacer';
 import { Text } from '../../../foundation/components/Text';
 import { useImage } from '../../../foundation/hooks/useImage';
 import { Color, Radius, Space, Typography } from '../../../foundation/styles/variables';
-import { useBook } from '../hooks/useBook';
 
 const _Wrapper = styled.li`
   width: 100%;
@@ -28,12 +29,10 @@ const _ImgWrapper = styled.div`
 `;
 
 type Props = {
-  bookId: string;
+  book: Omit<GetBookListResponse[number], 'nameRuby' | 'author'>;
 };
 
-export const BookListItem: React.FC<Props> = ({ bookId }) => {
-  const { data: book } = useBook({ params: { bookId } });
-
+export const BookListItem: React.FC<Props> = ({ book }) => {
   const imageUrl = useImage({ height: 64, imageId: book.image.id, width: 64 });
 
   return (
@@ -63,3 +62,8 @@ export const BookListItem: React.FC<Props> = ({ bookId }) => {
     </_Wrapper>
   );
 };
+
+export const BookListItemSkeleton = styled.li`
+  width: 100%;
+  height: 89px;
+`;
