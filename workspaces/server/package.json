@@ -14,7 +14,6 @@
     "@hono/swagger-ui": "0.2.1",
     "@hono/zod-openapi": "0.9.8",
     "@hono/zod-validator": "0.2.0",
-    "@jsquash/jxl": "1.1.0",
     "@node-kit/pnpm-workspace-root": "3.2.0",
     "@oneidentity/zstd-js": "1.0.3",
     "@wsh-2024/app": "workspace:*",
