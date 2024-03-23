@@ -4,7 +4,7 @@
   "scripts": {
     "build": "pnpm run build:clean && pnpm run build:vite && pnpm run build:copy",
     "build:clean": "rm -rf ./dist",
-    "build:copy": "mkdir -p ./dist/assets/ && cp -r ./assets/* ./dist/assets/",
+    "build:copy": "cp -r ./assets/* ./dist/assets/",
     "build:tsup": "tsup",
     "build:vite": "vite build"
   },
