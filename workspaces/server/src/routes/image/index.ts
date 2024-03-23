@@ -18,6 +18,8 @@ import { jpegXlConverter } from '../../image-converters/jpegXlConverter';
 import { pngConverter } from '../../image-converters/pngConverter';
 import { webpConverter } from '../../image-converters/webpConverter';
 
+const cacheMap = new Map<string, Uint8Array>();
+
 const cacheControlMiddleware = createMiddleware(async (c, next) => {
   await next();
   c.res.headers.append('Cache-Control', 'public');
@@ -99,6 +101,12 @@ app.get(
       throw new HTTPException(501, { message: `Image format: ${resImgFormat} is not supported.` });
     }
 
+    const cacheKey = `${reqImgId}-${resImgFormat}-${c.req.valid('query').width}-${c.req.valid('query').height}`;
+    if (cacheMap.has(cacheKey)) {
+      c.header('Content-Type', IMAGE_MIME_TYPE[resImgFormat]);
+      return c.body(cacheMap.get(cacheKey)!);
+    }
+
     const origFileGlob = [path.resolve(IMAGES_PATH, `${reqImgId}`), path.resolve(IMAGES_PATH, `${reqImgId}.*`)];
     const [origFilePath] = await globby(origFileGlob, { absolute: true, onlyFiles: true });
     if (origFilePath == null) {
@@ -133,6 +141,7 @@ app.get(
       height: manipulated.height,
       width: manipulated.width,
     });
+    cacheMap.set(cacheKey, resBinary);
 
     c.header('Content-Type', IMAGE_MIME_TYPE[resImgFormat]);
     return c.body(resBinary);
