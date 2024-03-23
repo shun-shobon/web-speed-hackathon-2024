@@ -16,11 +16,6 @@ import { getDayOfWeekStr } from '../../lib/date/getDayOfWeekStr';
 import { CoverSection } from './internal/CoverSection';
 
 const TopPage: React.FC = () => {
-  const todayStr = getDayOfWeekStr(new Date());
-  const { data: release } = useRelease({ params: { dayOfWeek: todayStr } });
-  const { data: featureList } = useFeatureList({ query: {} });
-  const { data: rankingList } = useRankingList({ query: {} });
-
   const pickupA11yId = useId();
   const rankingA11yId = useId();
   const todayA11yId = useId();
@@ -37,11 +32,9 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-            <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
-              {featureList.map((feature) => (
-                <FeatureCard key={feature.id} book={feature.book} />
-              ))}
-            </Flex>
+            <Suspense fallback={null}>
+              <PickupList />
+            </Suspense>
           </Box>
         </Box>
 
@@ -53,11 +46,9 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="hidden" overflowY="hidden">
-            <Flex align="center" as="ul" direction="column" justify="center">
-              {rankingList.map((ranking) => (
-                <RankingCard key={ranking.id} book={ranking.book} />
-              ))}
-            </Flex>
+            <Suspense fallback={null}>
+              <RankingList />
+            </Suspense>
           </Box>
         </Box>
 
@@ -69,14 +60,49 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-            <Flex align="stretch" gap={Space * 2} justify="flex-start">
-              {release.books.map((book) => (
-                <BookCard key={book.id} book={book} />
-              ))}
-            </Flex>
+            <Suspense fallback={null}>
+              <ReleaseList />
+            </Suspense>
           </Box>
         </Box>
       </Box>
+    </Flex>
+  );
+};
+
+const PickupList: React.FC = () => {
+  const { data: featureList } = useFeatureList({ query: {} });
+
+  return (
+    <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
+      {featureList.map((feature) => (
+        <FeatureCard key={feature.id} book={feature.book} />
+      ))}
+    </Flex>
+  );
+};
+
+const RankingList: React.FC = () => {
+  const { data: rankingList } = useRankingList({ query: {} });
+
+  return (
+    <Flex align="center" as="ul" direction="column" justify="center">
+      {rankingList.map((ranking) => (
+        <RankingCard key={ranking.id} book={ranking.book} />
+      ))}
+    </Flex>
+  );
+};
+
+const ReleaseList: React.FC = () => {
+  const todayStr = getDayOfWeekStr(new Date());
+  const { data: release } = useRelease({ params: { dayOfWeek: todayStr } });
+
+  return (
+    <Flex align="stretch" gap={Space * 2} justify="flex-start">
+      {release.books.map((book) => (
+        <BookCard key={book.id} book={book} />
+      ))}
     </Flex>
   );
 };
