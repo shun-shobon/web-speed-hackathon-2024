@@ -17,5 +17,6 @@ RUN pnpm build
 ENV PORT 8000
 EXPOSE 8000
 
-ENTRYPOINT ["pnpm"]
-CMD ["start"]
+WORKDIR /usr/src/app/workspaces/server
+ENTRYPOINT ["node"]
+CMD ["--enable-source-maps", "./dist/server.js"]
