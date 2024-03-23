@@ -67,3 +67,11 @@ export const BookCard: React.FC<Props> = ({ book }) => {
     </_Wrapper>
   );
 };
+
+export const BookCardSkeleton = styled.div`
+  border-radius: ${Radius.SMALL};
+  background-color: ${Color.MONO_A};
+  width: 192px;
+  height: 244px;
+  border: 1px solid ${Color.MONO_30};
+`;

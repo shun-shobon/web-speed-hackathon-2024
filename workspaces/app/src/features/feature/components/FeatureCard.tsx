@@ -81,3 +81,13 @@ export const FeatureCard: React.FC<Props> = ({ book }) => {
     </_Wrapper>
   );
 };
+
+export const FeatureCardSkeleton = styled.div`
+  gap: ${Space * 1}px;
+  background-color: ${Color.MONO_A};
+  border-radius: ${Radius.SMALL};
+  flex-shrink: 0;
+  border: 1px solid ${Color.MONO_30};
+  width: 328px;
+  height: 204px;
+`;

@@ -99,3 +99,8 @@ export const RankingCard: React.FC<Props> = ({ book }) => {
     </_Wrapper>
   );
 };
+
+export const RankingCardSkeleton = styled.li`
+  width: 100%;
+  height: 155px;
+`;

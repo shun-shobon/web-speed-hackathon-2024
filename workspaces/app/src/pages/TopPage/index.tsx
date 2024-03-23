@@ -1,9 +1,9 @@
 import { Suspense, useId } from 'react';
 
-import { BookCard } from '../../features/book/components/BookCard';
-import { FeatureCard } from '../../features/feature/components/FeatureCard';
+import { BookCard, BookCardSkeleton } from '../../features/book/components/BookCard';
+import { FeatureCard, FeatureCardSkeleton } from '../../features/feature/components/FeatureCard';
 import { useFeatureList } from '../../features/feature/hooks/useFeatureList';
-import { RankingCard } from '../../features/ranking/components/RankingCard';
+import { RankingCard, RankingCardSkeleton } from '../../features/ranking/components/RankingCard';
 import { useRankingList } from '../../features/ranking/hooks/useRankingList';
 import { useRelease } from '../../features/release/hooks/useRelease';
 import { Box } from '../../foundation/components/Box';
@@ -32,9 +32,19 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-            <Suspense fallback={null}>
-              <PickupList />
-            </Suspense>
+            <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
+              <Suspense
+                fallback={
+                  <>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <FeatureCardSkeleton key={i} />
+                    ))}
+                  </>
+                }
+              >
+                <PickupList />
+              </Suspense>
+            </Flex>
           </Box>
         </Box>
 
@@ -46,9 +56,19 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="hidden" overflowY="hidden">
-            <Suspense fallback={null}>
-              <RankingList />
-            </Suspense>
+            <Flex align="center" as="ul" direction="column" justify="center">
+              <Suspense
+                fallback={
+                  <>
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <RankingCardSkeleton key={i} />
+                    ))}
+                  </>
+                }
+              >
+                <RankingList />
+              </Suspense>
+            </Flex>
           </Box>
         </Box>
 
@@ -60,9 +80,19 @@ const TopPage: React.FC = () => {
           </Text>
           <Spacer height={Space * 2} />
           <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
-            <Suspense fallback={null}>
-              <ReleaseList />
-            </Suspense>
+            <Flex align="stretch" gap={Space * 2} justify="flex-start">
+              <Suspense
+                fallback={
+                  <>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <BookCardSkeleton key={i} />
+                    ))}
+                  </>
+                }
+              >
+                <ReleaseList />
+              </Suspense>
+            </Flex>
           </Box>
         </Box>
       </Box>
@@ -74,11 +104,11 @@ const PickupList: React.FC = () => {
   const { data: featureList } = useFeatureList({ query: {} });
 
   return (
-    <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
+    <>
       {featureList.map((feature) => (
         <FeatureCard key={feature.id} book={feature.book} />
       ))}
-    </Flex>
+    </>
   );
 };
 
@@ -86,11 +116,11 @@ const RankingList: React.FC = () => {
   const { data: rankingList } = useRankingList({ query: {} });
 
   return (
-    <Flex align="center" as="ul" direction="column" justify="center">
+    <>
       {rankingList.map((ranking) => (
         <RankingCard key={ranking.id} book={ranking.book} />
       ))}
-    </Flex>
+    </>
   );
 };
 
@@ -99,11 +129,11 @@ const ReleaseList: React.FC = () => {
   const { data: release } = useRelease({ params: { dayOfWeek: todayStr } });
 
   return (
-    <Flex align="stretch" gap={Space * 2} justify="flex-start">
+    <>
       {release.books.map((book) => (
         <BookCard key={book.id} book={book} />
       ))}
-    </Flex>
+    </>
   );
 };
 
