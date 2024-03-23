@@ -14,9 +14,11 @@ import type { PatchBookRequestParams } from '@wsh-2024/schema/src/api/books/Patc
 import type { PatchBookResponse } from '@wsh-2024/schema/src/api/books/PatchBookResponse';
 import type { PostBookRequestBody } from '@wsh-2024/schema/src/api/books/PostBookRequestBody';
 import type { PostBookResponse } from '@wsh-2024/schema/src/api/books/PostBookResponse';
+import type { SearchBookRequestQuery } from '@wsh-2024/schema/src/api/books/SearchBookRequestQuery';
 import { author, book, episode, episodePage, feature, ranking } from '@wsh-2024/schema/src/models';
 
 import { getDatabase } from '../database/drizzle';
+import { normalizeString } from '../libs/isContains';
 
 type BookRepositoryInterface = {
   create(options: { body: PostBookRequestBody }): Promise<Result<PostBookResponse, HTTPException>>;
@@ -156,6 +158,71 @@ class BookRepository implements BookRepositoryInterface {
         return err(cause);
       }
       return err(new HTTPException(500, { cause, message: `Failed to read book list.` }));
+    }
+  }
+
+  async search(options: { query: SearchBookRequestQuery }): Promise<Result<GetBookListResponse, HTTPException>> {
+    try {
+      const data = await getDatabase().query.book.findMany({
+        columns: {
+          description: true,
+          id: true,
+          name: true,
+          nameRuby: true,
+        },
+        limit: 20,
+        orderBy(book, { asc }) {
+          return asc(book.createdAt);
+        },
+        with: {
+          author: {
+            columns: {
+              description: true,
+              id: true,
+              name: true,
+            },
+            with: {
+              image: {
+                columns: {
+                  alt: true,
+                  id: true,
+                },
+              },
+            },
+          },
+          episodes: {
+            columns: {
+              id: true,
+            },
+          },
+          image: {
+            columns: {
+              alt: true,
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (options.query.keyword == null || options.query.keyword === '') {
+        return ok([]);
+      }
+
+      const normalizedKeyword = normalizeString(options.query.keyword);
+
+      const relatedBooks = data.filter((book) => {
+        return (
+          normalizeString(book.name).includes(normalizedKeyword) ||
+          normalizeString(book.nameRuby).includes(normalizedKeyword)
+        );
+      });
+
+      return ok(relatedBooks);
+    } catch (cause) {
+      if (cause instanceof HTTPException) {
+        return err(cause);
+      }
+      return err(new HTTPException(500, { cause, message: `Failed to search book list.` }));
     }
   }
 

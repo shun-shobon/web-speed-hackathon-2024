@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import { BookListItem } from '../../../features/book/components/BookListItem';
-import { useBookList } from '../../../features/book/hooks/useBookList';
+import { useBookSearch } from '../../../features/book/hooks/useBookSearch';
 import { Text } from '../../../foundation/components/Text';
 import { Color, Typography } from '../../../foundation/styles/variables';
 
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const SearchResult: React.FC<Props> = memo(({ keyword }: Props) => {
-  const { data: books } = useBookList({ query: { limit: 30, name: keyword } });
+  const { data: books } = useBookSearch({ query: { keyword } });
 
   if (books.length === 0) {
     return (
