@@ -23,6 +23,7 @@ import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
+import { encrypt } from '@wsh-2024/image-encrypt/src/encrypt';
 import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
 import type { GetEpisodeResponse } from '@wsh-2024/schema/src/api/episodes/GetEpisodeResponse';
 
@@ -137,11 +138,50 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
   const handleRequestToUploadFile = async (file: File | undefined) => {
     if (file == null || episode == null) return;
 
-    createEpisodePage({
-      episodeId: episode.id,
-      image: file,
-      page: (episode.pages.at(-1)?.page ?? 0) + 1,
-    });
+    const blobUrl = URL.createObjectURL(file);
+
+    try {
+      const image = new Image();
+      image.src = blobUrl;
+      await image.decode();
+
+      const resizedWidth = 500;
+      const resizedHeight = Math.floor((image.naturalHeight / image.naturalWidth) * resizedWidth);
+
+      const resizeCanvas = document.createElement('canvas');
+      resizeCanvas.width = resizedWidth;
+      resizeCanvas.height = resizedHeight;
+      const ctx = resizeCanvas.getContext('2d')!;
+      ctx.drawImage(image, 0, 0, resizedWidth, resizedHeight);
+      const resizedBlob = await new Promise<Blob | null>((resolve) => resizeCanvas.toBlob(resolve, 'image/png'));
+      const resizedUrl = URL.createObjectURL(resizedBlob!);
+
+      const resizedImage = new Image();
+      resizedImage.src = resizedUrl;
+      await resizedImage.decode();
+
+      encrypt({
+        exportCanvasContext: ctx,
+        sourceImage: resizedImage,
+        sourceImageInfo: {
+          height: image.naturalHeight,
+          width: image.naturalWidth,
+        },
+      });
+
+      URL.revokeObjectURL(resizedUrl);
+
+      const blob = await new Promise<Blob | null>((resolve) => resizeCanvas.toBlob(resolve, 'image/png'));
+      if (blob == null) return;
+
+      createEpisodePage({
+        episodeId: episode.id,
+        image: new File([blob], 'encrypted.png', { type: 'image/png' }),
+        page: (episode.pages.at(-1)?.page ?? 0) + 1,
+      });
+    } finally {
+      URL.revokeObjectURL(blobUrl);
+    }
   };
 
   const handleRequestToDeletePage = (episodePageId: string) => {

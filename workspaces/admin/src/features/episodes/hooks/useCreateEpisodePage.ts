@@ -21,7 +21,6 @@ export const useCreateEpisodePage = () => {
         body: {
           alt: image.name,
           content: image,
-          isBooks: 'true',
         },
       });
 

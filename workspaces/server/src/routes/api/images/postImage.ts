@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import { PostImageRequestBodySchema } from '@wsh-2024/schema/src/api/images/PostImageRequestBody';
 import { PostImageResponseSchema } from '@wsh-2024/schema/src/api/images/PostImageResponse';
 
-import { BOOK_IAMGES_PATH } from '../../../constants/paths';
+import { IMAGES_PATH } from '../../../constants/paths';
 import { authMiddleware } from '../../../middlewares/authMiddleware';
 import { imageRepository } from '../../../repositories';
 
@@ -74,7 +74,7 @@ app.openapi(route, async (c) => {
     throw new Error('Unsupported image format.');
   }
 
-  const imagePath = path.resolve(BOOK_IAMGES_PATH, `./${result.value.id}.webp`);
+  const imagePath = path.resolve(IMAGES_PATH, `./${result.value.id}.webp`);
   await sharp(origBinary)
     .ensureAlpha()
     .toFormat('webp', {

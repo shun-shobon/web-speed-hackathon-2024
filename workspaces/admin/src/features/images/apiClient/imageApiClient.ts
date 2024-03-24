@@ -15,9 +15,6 @@ export const imageApiClient: ImageApiClient = {
     const formData = new FormData();
     formData.append('alt', body.alt);
     formData.append('content', body.content);
-    if (body.isBooks != null) {
-      formData.append('isBooks', 'true');
-    }
 
     const response = await apiClient
       .post(inject('api/v1/images', {}), {
