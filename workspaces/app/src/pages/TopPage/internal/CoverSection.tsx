@@ -33,7 +33,7 @@ export const CoverSection: React.FC = () => {
   return (
     <_Wrapper>
       <HeroImage />
-      <_SearchLink href="/search">
+      <_SearchLink to="/search">
         <Search style={{ color: Color.MONO_A, height: 24, width: 24 }} />
         <Text color={Color.MONO_A} typography={Typography.NORMAL16}>
           検索

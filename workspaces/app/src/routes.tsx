@@ -33,7 +33,7 @@ export const Router: React.FC = () => {
         element={
           <ActionLayout
             leftContent={
-              <_BackToTopButton href={'/'}>
+              <_BackToTopButton to={'/'}>
                 <ArrowBack style={{ color: Color.MONO_100, height: 32, width: 32 }} />
                 <Text color={Color.MONO_100} typography={Typography.NORMAL16} weight="bold">
                   トップへ戻る
