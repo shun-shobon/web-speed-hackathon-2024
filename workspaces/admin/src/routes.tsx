@@ -1,4 +1,4 @@
-import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
+import { createBrowserRouter, createRoutesFromElements, redirect, Route } from 'react-router-dom';
 
 import { authApiClient } from './features/auth/apiClient/authApiClient';
 import { CommonLayout } from './foundation/layouts/CommonLayout';
@@ -9,7 +9,7 @@ import { BookListPage } from './pages/BookListPage';
 import { EpisodeCreatePage } from './pages/EpisodeCreatePage';
 import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
 
-async function authGuard(): Promise<void> {
+async function authGuard(): Promise<Response | null> {
   const user = await queryClient.fetchQuery({
     queryFn: async () => {
       try {
@@ -23,58 +23,20 @@ async function authGuard(): Promise<void> {
   });
 
   if (user == null) {
-    throw redirect({
-      to: `/admin`,
-    });
+    return redirect('/admin');
   }
+
+  return null;
 }
 
-const rootRoute = createRootRoute({
-  component: CommonLayout,
-});
-
-const authRoute = createRoute({
-  component: AuthPage,
-  getParentRoute: () => rootRoute,
-  path: `/admin`,
-});
-
-const authorListRoute = createRoute({
-  beforeLoad: authGuard,
-  component: AuthorListPage,
-  getParentRoute: () => rootRoute,
-  path: `/admin/authors`,
-});
-
-const bookListRoute = createRoute({
-  beforeLoad: authGuard,
-  component: BookListPage,
-  getParentRoute: () => rootRoute,
-  path: `/admin/books`,
-});
-
-export const episodeDetailRoute = createRoute({
-  beforeLoad: authGuard,
-  component: EpisodeDetailPage,
-  getParentRoute: () => rootRoute,
-  path: `/admin/books/$bookId/episodes/$episodeId`,
-});
-
-export const episodeCreateRoute = createRoute({
-  beforeLoad: authGuard,
-  component: EpisodeCreatePage,
-  getParentRoute: () => rootRoute,
-  path: `/admin/books/$bookId/episodes/new`,
-});
-
-const routeTree = rootRoute.addChildren([
-  authRoute,
-  authorListRoute,
-  bookListRoute,
-  episodeDetailRoute,
-  episodeCreateRoute,
-]);
-
-export const router = () => {
-  return createRouter({ routeTree });
-};
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<CommonLayout />} path={'/'}>
+      <Route element={<AuthPage />} path={'/admin'} />
+      <Route element={<AuthorListPage />} loader={authGuard} path={'/admin/authors'} />
+      <Route element={<BookListPage />} loader={authGuard} path={'/admin/books'} />
+      <Route element={<EpisodeDetailPage />} loader={authGuard} path={'/admin/books/:bookId/episodes/:episodeId'} />
+      <Route element={<EpisodeCreatePage />} loader={authGuard} path={'/admin/books/:bookId/episodes/new'} />
+    </Route>,
+  ),
+);

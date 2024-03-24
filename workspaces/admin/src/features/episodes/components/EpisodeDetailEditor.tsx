@@ -18,9 +18,9 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import { useNavigate } from '@tanstack/react-router';
 import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { encrypt } from '@wsh-2024/image-encrypt/src/encrypt';
@@ -72,10 +72,7 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
           },
           {
             onSuccess(episode) {
-              navigate({
-                params: { bookId: book.id, episodeId: episode.id },
-                to: '/admin/books/$bookId/episodes/$episodeId',
-              });
+              navigate(`/admin/books/${book.id}/episodes/${episode.id}`);
             },
           },
         );
@@ -126,9 +123,7 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
       },
       {
         onSuccess() {
-          navigate({
-            to: '/admin/books',
-          });
+          navigate('/admin/books');
         },
       },
     );

@@ -1,7 +1,7 @@
 import { ChakraProvider, useToast } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { RouterProvider } from '@tanstack/react-router';
 import { Suspense, useEffect } from 'react';
+import { RouterProvider } from 'react-router-dom';
 
 import { queryClient } from './lib/api/queryClient';
 import { router } from './routes';
@@ -32,7 +32,7 @@ export const AdminApp: React.FC = () => {
     <Suspense fallback={null}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>
-          <RouterProvider router={router()} />
+          <RouterProvider router={router} />
         </ChakraProvider>
       </QueryClientProvider>
     </Suspense>

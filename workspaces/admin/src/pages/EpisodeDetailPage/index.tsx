@@ -1,12 +1,15 @@
 import { CircularProgress, Flex } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import invariant from 'tiny-invariant';
 
 import { useBook } from '../../features/books/hooks/useBook';
 import { EpisodeDetailEditor } from '../../features/episodes/components/EpisodeDetailEditor';
 import { useEpisode } from '../../features/episodes/hooks/useEpisode';
-import { episodeDetailRoute } from '../../routes';
 
 export const EpisodeDetailPage: React.FC = () => {
-  const { bookId, episodeId } = episodeDetailRoute.useParams();
+  const { bookId, episodeId } = useParams();
+  invariant(bookId);
+  invariant(episodeId);
 
   const { data: book } = useBook({ bookId });
   const { data: episode } = useEpisode({ episodeId });

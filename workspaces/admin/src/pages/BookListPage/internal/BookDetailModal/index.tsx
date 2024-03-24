@@ -16,7 +16,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 import { useToggle } from 'react-use';
 
 import { useBook } from '../../../../features/books/hooks/useBook';
