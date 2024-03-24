@@ -41,9 +41,11 @@ export const BookDetailContent: React.FC<BookDetailContentProps> = ({ book, onCl
         <Image
           alt={book.name}
           aspectRatio="3 / 4"
+          decoding="async"
           height={256}
+          loading="lazy"
           objectFit="cover"
-          src={getImageUrl({ format: 'webp', height: 256, imageId: book.image.id, width: 192 })}
+          src={getImageUrl({ height: 256, imageId: book.image.id, width: 192 })}
           width={192}
         />
         <Stack p={4} spacing={2}>

@@ -52,6 +52,14 @@ export const ComicPageImage: React.FC<Props> = ({ pageImageId }) => {
   }, [blob]);
 
   return (
-    <ChakraImage alt={blobUrl != null ? pageImageId : ''} height={304} objectFit="cover" src={blobUrl} width={216} />
+    <ChakraImage
+      alt={blobUrl != null ? pageImageId : ''}
+      decoding="async"
+      height={304}
+      loading="lazy"
+      objectFit="cover"
+      src={blobUrl}
+      width={216}
+    />
   );
 };

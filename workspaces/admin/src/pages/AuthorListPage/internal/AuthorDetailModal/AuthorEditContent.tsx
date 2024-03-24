@@ -83,7 +83,7 @@ export const AuthorEditContent: React.FC<AuthorEditContentProps> = ({ author, on
       <Box as="form" onSubmit={formik.handleSubmit}>
         <Flex align="center" pb={2}>
           <Box position="relative">
-            <Avatar size="xl" src={avatorUrl} />
+            <Avatar loading="lazy" size="xl" src={avatorUrl} />
 
             <FormControl
               alignItems="center"
