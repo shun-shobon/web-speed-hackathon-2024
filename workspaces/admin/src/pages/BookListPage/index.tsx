@@ -17,6 +17,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useDebounce } from '@uidotdev/usehooks';
 import { useFormik } from 'formik';
 import { memo, useCallback, useId, useState } from 'react';
 import { create } from 'zustand';
@@ -71,6 +72,14 @@ export const BookListPage: React.FC = () => {
     },
     onSubmit() {},
   });
+  const [debouncedValue, setDebouncedValue] = useState(formik.values);
+  useDebounce(
+    () => {
+      setDebouncedValue(formik.values);
+    },
+    500,
+    [formik.values],
+  );
 
   const [useModalStore] = useState(() => {
     return create<BookModalState & BookModalAction>()((set) => ({
@@ -188,9 +197,9 @@ export const BookListPage: React.FC = () => {
                 </Tr>
               </Thead>
               <MemorizedBookTBody
-                kind={formik.values.kind}
+                kind={debouncedValue.kind}
                 onDetailClick={handleDetailClick}
-                query={formik.values.query}
+                query={debouncedValue.query}
               />
             </Table>
           </TableContainer>
