@@ -6,13 +6,12 @@ import { createCanvas, loadImage } from '@napi-rs/canvas';
 import { Hono } from 'hono';
 import { createMiddleware } from 'hono/factory';
 import { HTTPException } from 'hono/http-exception';
-import { Image } from 'image-js';
+import sharp from 'sharp';
 import { z } from 'zod';
 
 import { encrypt } from '@wsh-2024/image-encrypt/src/encrypt';
 
 import { BOOK_IAMGES_PATH, IMAGES_PATH } from '../../constants/paths';
-import { webpConverter } from '../../image-converters/webpConverter';
 
 const cacheMap = new Map<string, Uint8Array>();
 
@@ -69,53 +68,35 @@ app.get(
       return c.body(origBinary);
     }
 
-    const image = new Image(await webpConverter.decode(origBinary));
-
     const reqImageSize = c.req.valid('query');
 
-    const scale = Math.max((reqImageSize.width ?? 0) / image.width, (reqImageSize.height ?? 0) / image.height) || 1;
-    const manipulated = image.resize({
-      height: Math.ceil(image.height * scale),
-      preserveAspectRatio: true,
-      width: Math.ceil(image.width * scale),
-    });
+    const resized = sharp(origBinary).resize(reqImageSize.width, reqImageSize.height);
 
-    if (c.req.valid('query').isBooks) {
-      const canvas = createCanvas(manipulated.width, manipulated.height);
-      const ctx = canvas.getContext('2d');
-      const sourceImage = await loadImage(manipulated.toBuffer({ format: 'png' }));
-
-      encrypt({
-        // パワー！！！！！
-        exportCanvasContext: ctx as unknown as CanvasRenderingContext2D,
-        // @ts-expect-error パワー！！！！！
-        sourceImage,
-        sourceImageInfo: {
-          height: manipulated.height,
-          width: manipulated.width,
-        },
-      });
-
-      const data = canvas.data();
-
-      const resBinary = await webpConverter.encode({
-        colorSpace: 'srgb',
-        data: new Uint8ClampedArray(data),
-        height: manipulated.height,
-        width: manipulated.width,
-      });
+    if (!c.req.valid('query').isBooks) {
+      const resBinary = await resized.toBuffer();
       cacheMap.set(cacheKey, resBinary);
 
       c.header('Content-Type', 'image/webp');
       return c.body(resBinary);
     }
+    const { data: resizedBuffer, info } = await resized.png().toBuffer({ resolveWithObject: true });
+    const sourceImage = await loadImage(resizedBuffer);
+    const canvas = createCanvas(info.width, info.height);
+    const ctx = canvas.getContext('2d');
 
-    const resBinary = await webpConverter.encode({
-      colorSpace: 'srgb',
-      data: new Uint8ClampedArray(manipulated.data),
-      height: manipulated.height,
-      width: manipulated.width,
+    encrypt({
+      // パワー！！！！！
+      exportCanvasContext: ctx as unknown as CanvasRenderingContext2D,
+      // @ts-expect-error パワー！！！！！
+      sourceImage,
+      sourceImageInfo: {
+        height: info.height,
+        width: info.width,
+      },
     });
+
+    const resBinary = await canvas.encode('webp', 70);
+
     cacheMap.set(cacheKey, resBinary);
 
     c.header('Content-Type', 'image/webp');
