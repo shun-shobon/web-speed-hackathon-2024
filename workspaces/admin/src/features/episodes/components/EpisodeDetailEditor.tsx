@@ -151,8 +151,8 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
       const resizeCanvas = document.createElement('canvas');
       resizeCanvas.width = resizedWidth;
       resizeCanvas.height = resizedHeight;
-      const ctx = resizeCanvas.getContext('2d')!;
-      ctx.drawImage(image, 0, 0, resizedWidth, resizedHeight);
+      const resizedCtx = resizeCanvas.getContext('2d')!;
+      resizedCtx.drawImage(image, 0, 0, resizedWidth, resizedHeight);
       const resizedBlob = await new Promise<Blob | null>((resolve) => resizeCanvas.toBlob(resolve, 'image/png'));
       const resizedUrl = URL.createObjectURL(resizedBlob!);
 
@@ -160,18 +160,23 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
       resizedImage.src = resizedUrl;
       await resizedImage.decode();
 
+      const encryptCanvas = document.createElement('canvas');
+      encryptCanvas.width = resizedWidth;
+      encryptCanvas.height = resizedHeight;
+      const encryptCtx = encryptCanvas.getContext('2d')!;
+
       encrypt({
-        exportCanvasContext: ctx,
+        exportCanvasContext: encryptCtx,
         sourceImage: resizedImage,
         sourceImageInfo: {
-          height: image.naturalHeight,
-          width: image.naturalWidth,
+          height: resizedImage.naturalHeight,
+          width: resizedImage.naturalWidth,
         },
       });
 
       URL.revokeObjectURL(resizedUrl);
 
-      const blob = await new Promise<Blob | null>((resolve) => resizeCanvas.toBlob(resolve, 'image/png'));
+      const blob = await new Promise<Blob | null>((resolve) => encryptCanvas.toBlob(resolve, 'image/png'));
       if (blob == null) return;
 
       createEpisodePage({
