@@ -17,6 +17,7 @@ export const ComicPageImage: React.FC<Props> = ({ pageImageId }) => {
       image.src = getImageUrl({
         format: 'webp',
         imageId: pageImageId,
+        isBooks: true,
       });
       await image.decode();
 
