@@ -6,7 +6,7 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { PostImageRequestBodySchema } from '@wsh-2024/schema/src/api/images/PostImageRequestBody';
 import { PostImageResponseSchema } from '@wsh-2024/schema/src/api/images/PostImageResponse';
 
-import { IMAGES_PATH } from '../../../constants/paths';
+import { BOOK_IAMGES_PATH } from '../../../constants/paths';
 import { authMiddleware } from '../../../middlewares/authMiddleware';
 import { imageRepository } from '../../../repositories';
 
@@ -51,11 +51,11 @@ app.openapi(route, async (c) => {
     throw result.error;
   }
 
-  await fs.mkdir(IMAGES_PATH, {
+  await fs.mkdir(BOOK_IAMGES_PATH, {
     recursive: true,
   });
   await fs.writeFile(
-    path.resolve(IMAGES_PATH, `./${result.value.id}.jpg`),
+    path.resolve(BOOK_IAMGES_PATH, `./${result.value.id}.jpg`),
     Buffer.from(await formData.content.arrayBuffer()),
   );
 
