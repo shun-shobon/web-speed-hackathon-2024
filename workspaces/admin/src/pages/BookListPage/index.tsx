@@ -72,10 +72,7 @@ export const BookListPage: React.FC = () => {
     },
     onSubmit() {},
   });
-  const [debouncedValue, setDebouncedValue] = useState(formik.values);
-  useDebounce(() => {
-    setDebouncedValue(formik.values);
-  }, 500);
+  const debouncedValue = useDebounce(formik.values, 500);
 
   const [useModalStore] = useState(() => {
     return create<BookModalState & BookModalAction>()((set) => ({
