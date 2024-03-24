@@ -18,7 +18,8 @@ const cacheMap = new Map<string, Uint8Array>();
 const cacheControlMiddleware = createMiddleware(async (c, next) => {
   await next();
   c.res.headers.append('Cache-Control', 'public');
-  c.res.headers.append('Cache-Control', 'max-age=1800');
+  c.res.headers.append('Cache-Control', 'max-age=31536000');
+  c.res.headers.append('Cache-Control', 'immutable');
 });
 
 const app = new Hono();
