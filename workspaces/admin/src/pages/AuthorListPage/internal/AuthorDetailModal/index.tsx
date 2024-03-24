@@ -15,7 +15,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { useToggle } from '@uidotdev/usehooks';
+import { useToggle } from 'react-use';
 
 import { useAuthor } from '../../../../features/authors/hooks/useAuthor';
 import { useBookList } from '../../../../features/books/hooks/useBookList';

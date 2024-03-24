@@ -17,7 +17,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { Link } from '@tanstack/react-router';
-import { useToggle } from '@uidotdev/usehooks';
+import { useToggle } from 'react-use';
 
 import { useBook } from '../../../../features/books/hooks/useBook';
 import { useEpisodeList } from '../../../../features/episodes/hooks/useEpisodeList';

@@ -8,7 +8,6 @@
     "@emotion/styled": "11.11.0",
     "@tanstack/react-query": "5.18.1",
     "@tanstack/react-router": "1.15.19",
-    "@uidotdev/usehooks": "2.4.1",
     "@wsh-2024/image-encrypt": "workspace:*",
     "@wsh-2024/schema": "workspace:*",
     "formik": "2.4.5",
@@ -16,6 +15,7 @@
     "ky": "1.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-use": "17.5.0",
     "regexparam": "3.0.0",
     "yup": "1.4.0",
     "zustand": "4.5.2"

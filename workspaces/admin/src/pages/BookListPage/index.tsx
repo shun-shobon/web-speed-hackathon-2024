@@ -17,9 +17,9 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { useDebounce } from '@uidotdev/usehooks';
 import { useFormik } from 'formik';
 import { memo, useCallback, useId, useState } from 'react';
+import { useDebounce } from 'react-use';
 import { create } from 'zustand';
 
 import { useBookSearch } from '../../features/books/hooks/useBookSearch';
@@ -72,7 +72,14 @@ export const BookListPage: React.FC = () => {
     },
     onSubmit() {},
   });
-  const debouncedValue = useDebounce(formik.values, 500);
+  const [debouncedValue, setDebouncedValue] = useState(formik.values);
+  useDebounce(
+    () => {
+      setDebouncedValue(formik.values);
+    },
+    500,
+    [formik.values],
+  );
 
   const [useModalStore] = useState(() => {
     return create<BookModalState & BookModalAction>()((set) => ({
