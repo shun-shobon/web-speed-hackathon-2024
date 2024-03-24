@@ -7,6 +7,12 @@ import { PostImageRequestBodySchema } from '@wsh-2024/schema/src/api/images/Post
 import { PostImageResponseSchema } from '@wsh-2024/schema/src/api/images/PostImageResponse';
 
 import { BOOK_IAMGES_PATH } from '../../../constants/paths';
+import type { ConverterInterface } from '../../../image-converters/ConverterInterface';
+import { avifConverter } from '../../../image-converters/avifConverter';
+import { jpegConverter } from '../../../image-converters/jpegConverter';
+import { jpegXlConverter } from '../../../image-converters/jpegXlConverter';
+import { pngConverter } from '../../../image-converters/pngConverter';
+import { webpConverter } from '../../../image-converters/webpConverter';
 import { authMiddleware } from '../../../middlewares/authMiddleware';
 import { imageRepository } from '../../../repositories';
 
@@ -37,6 +43,32 @@ const route = createRoute({
   tags: ['[Admin] Images API'],
 });
 
+const SUPPORTED_IMAGE_EXTENSIONS = ['jxl', 'avif', 'webp', 'png', 'jpeg', 'jpg'] as const;
+
+type SupportedImageExtension = (typeof SUPPORTED_IMAGE_EXTENSIONS)[number];
+
+function isSupportedImageFormat(ext: unknown): ext is SupportedImageExtension {
+  return (SUPPORTED_IMAGE_EXTENSIONS as readonly unknown[]).includes(ext);
+}
+
+const IMAGE_MIME_TYPE: Record<string, SupportedImageExtension> = {
+  ['image/avif']: 'avif',
+  ['image/jpeg']: 'jpeg',
+  ['image/jpg']: 'jpeg',
+  ['image/jxl']: 'jxl',
+  ['image/png']: 'png',
+  ['image/webp']: 'webp',
+};
+
+const IMAGE_CONVERTER: Record<SupportedImageExtension, ConverterInterface> = {
+  ['avif']: avifConverter,
+  ['jpeg']: jpegConverter,
+  ['jpg']: jpegConverter,
+  ['jxl']: jpegXlConverter,
+  ['png']: pngConverter,
+  ['webp']: webpConverter,
+};
+
 app.use(route.getRoutingPath(), authMiddleware);
 app.openapi(route, async (c) => {
   const formData = c.req.valid('form');
@@ -51,13 +83,19 @@ app.openapi(route, async (c) => {
     throw result.error;
   }
 
+  const origBinary = await formData.content.arrayBuffer();
+  const ext = IMAGE_MIME_TYPE[formData.content.type];
+  if (!isSupportedImageFormat(ext)) {
+    throw new Error('Unsupported image format.');
+  }
+
+  const image = await IMAGE_CONVERTER[ext].decode(new Uint8Array(origBinary));
+  const webp = await webpConverter.encode(image);
+
   await fs.mkdir(BOOK_IAMGES_PATH, {
     recursive: true,
   });
-  await fs.writeFile(
-    path.resolve(BOOK_IAMGES_PATH, `./${result.value.id}.jpg`),
-    Buffer.from(await formData.content.arrayBuffer()),
-  );
+  await fs.writeFile(path.resolve(BOOK_IAMGES_PATH, `./${result.value.id}.webp`), webp);
 
   return c.json(result.value);
 });

@@ -13,7 +13,7 @@ type ImageRepositoryInterface = {
 
 class ImageRepository implements ImageRepositoryInterface {
   async create(options: {
-    body: Omit<PostImageRequestBody, 'content'>;
+    body: Omit<PostImageRequestBody, 'content' | 'isBooks'>;
   }): Promise<Result<PostImageResponse, HTTPException>> {
     try {
       const result = await getDatabase()

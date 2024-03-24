@@ -1,15 +1,13 @@
 type Params = {
-  format: 'avif' | 'webp' | 'png' | 'jpg';
   height?: number;
   imageId: string;
   isBooks?: boolean;
   width?: number;
 };
 
-export function getImageUrl({ format, height, imageId, isBooks, width }: Params): string {
+export function getImageUrl({ height, imageId, isBooks, width }: Params): string {
   const url = new URL(`/images/${imageId}`, location.href);
 
-  url.searchParams.set('format', format);
   if (width != null) {
     url.searchParams.set('width', `${width}`);
   }

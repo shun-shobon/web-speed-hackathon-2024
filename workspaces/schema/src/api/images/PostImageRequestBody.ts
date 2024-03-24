@@ -14,6 +14,7 @@ export const PostImageRequestBodySchema = createInsertSchema(image)
         format: 'binary',
         type: 'string',
       }),
+    isBooks: z.string().optional(),
   });
 
 export type PostImageRequestBody = z.infer<typeof PostImageRequestBodySchema>;
