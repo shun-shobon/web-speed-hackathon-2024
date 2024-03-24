@@ -163,6 +163,10 @@ class BookRepository implements BookRepositoryInterface {
 
   async search(options: { query: SearchBookRequestQuery }): Promise<Result<GetBookListResponse, HTTPException>> {
     try {
+      if (!options.query.bookId && !options.query.authorId && !options.query.name && !options.query.authorName) {
+        return ok([]);
+      }
+
       const data = await getDatabase().query.book.findMany({
         columns: {
           description: true,
