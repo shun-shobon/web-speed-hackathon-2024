@@ -1,7 +1,7 @@
 import { MAPPING } from './mapping';
 
-const COLUMN_SIZE = 8;
-const ROW_SIZE = 16;
+const COLUMN_SIZE = 4;
+const ROW_SIZE = 8;
 
 export async function decrypt({
   exportCanvasContext,
@@ -20,7 +20,16 @@ export async function decrypt({
 
   exportCanvasContext.drawImage(sourceImage, 0, 0);
 
-  for (const { from, to } of MAPPING) {
+  for (const [toIdx, fromIdx] of MAPPING.entries()) {
+    const from = {
+      column: fromIdx % COLUMN_SIZE,
+      row: Math.floor(fromIdx / COLUMN_SIZE),
+    };
+    const to = {
+      column: toIdx % COLUMN_SIZE,
+      row: Math.floor(toIdx / COLUMN_SIZE),
+    };
+
     const srcX = columnOffsetPixel + from.column * columnPixel;
     const srcY = rowOffsetPixel + from.row * rowPixel;
     const destX = columnOffsetPixel + to.column * columnPixel;
