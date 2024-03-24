@@ -19,10 +19,11 @@ const _Container = styled.div`
 const _Wrapper = styled.div<{
   $maxHeight: number;
 }>`
+  background-color: black;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 100%;
-  max-height: ${({ $maxHeight }) => addUnitIfNeeded($maxHeight)};
+  height: ${({ $maxHeight }) => addUnitIfNeeded($maxHeight)};
   overflow: hidden;
 `;
 
